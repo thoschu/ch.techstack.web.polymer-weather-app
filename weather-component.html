@@ -15,7 +15,7 @@
                 color: blue;
             }
         </style>
-        <h1>[[city]] - [[copyr]]</h1>
+        <!--<h1>[[city]] - [[copyr]]</h1>-->
         <div id="chart_div" style="width: 800px; height: 240px;"></div>
     </template>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -72,7 +72,7 @@
                     setInterval(function() {
                         data.setValue(0, 1, that.get('result').main.temp - 273.15);
                         chart.draw(data, options);
-                    }, 1500);
+                    }, 1000);
                 }
             }
         });
