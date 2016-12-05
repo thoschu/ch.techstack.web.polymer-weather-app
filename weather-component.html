@@ -33,9 +33,6 @@
                     type: String,
                     value: 'Berlin'
                 },
-                title: {
-                    type: String
-                },
                 result: {
                     type: Object
                 }
@@ -51,14 +48,13 @@
             },
             onResponse: function (response) {
                 var that = this;
-                this.set('title', response.detail.response.name);
                 this.set('result', response.detail.response);
                 google.charts.load('current', {'packages': ['gauge']});
                 google.charts.setOnLoadCallback(drawChart);
                 function drawChart() {
                     var data = google.visualization.arrayToDataTable([
                         ['Label', 'Value'],
-                        [that.get('title'), that.get('result').main.temp - 273.15]
+                        [that.get('result').name, -30]
                     ]);
 
                     var options = {
@@ -73,6 +69,10 @@
 
                     var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
                     chart.draw(data, options);
+                    setInterval(function() {
+                        data.setValue(0, 1, that.get('result').main.temp - 273.15);
+                        chart.draw(data, options);
+                    }, 1500);
                 }
             }
         });
