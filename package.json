@@ -1,0 +1,19 @@
+{
+  "name": "de.schulte360.web.polymer-weather-app",
+  "version": "1.0.0",
+  "description": "https://www.polymer-project.org/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thoschu/de.schulte360.web.polymer-weather-app.git"
+  },
+  "author": "Tom S.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thoschu/de.schulte360.web.polymer-weather-app/issues"
+  },
+  "homepage": "https://github.com/thoschu/de.schulte360.web.polymer-weather-app#readme"
+}

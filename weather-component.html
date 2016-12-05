@@ -1,0 +1,80 @@
+<link rel="import" href="./bower_components/polymer/polymer.html">
+<link rel="import" href="./bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="weather-component" attributes="apikey city">
+    <template>
+        <iron-ajax
+                auto
+                url="http://api.openweathermap.org/data/2.5/weather?q=[[city]]&APPID=[[apikey]]"
+                handle-as="json"
+                id="xhr"
+                on-response="onResponse">
+        </iron-ajax>
+        <style>
+            h1 {
+                color: blue;
+            }
+        </style>
+        <h1>[[city]] - [[copyr]]</h1>
+        <div id="chart_div" style="width: 800px; height: 240px;"></div>
+    </template>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        'use strict'
+        const url = "http://api.openweathermap.org/data/2.5/weather";
+        Polymer({
+            is: 'weather-component',
+            properties: {
+                apikey: {
+                    type: String,
+                    value: '685d75af65db689597d56a87fda9baf4'
+                },
+                city: {
+                    type: String,
+                    value: 'Berlin'
+                },
+                title: {
+                    type: String
+                },
+                result: {
+                    type: Object
+                }
+            },
+            ready: function () {
+                var d = new Date();
+                this.copyr = d.getUTCFullYear();
+            },
+            resolve: function (event) {
+                if (event.target.value.match(/^[0-9]+$/)) {
+                    //this.set('resolveUrl', url + event.target.value);
+                }
+            },
+            onResponse: function (response) {
+                var that = this;
+                this.set('title', response.detail.response.name);
+                this.set('result', response.detail.response);
+                google.charts.load('current', {'packages': ['gauge']});
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Label', 'Value'],
+                        [that.get('title'), that.get('result').main.temp - 273.15]
+                    ]);
+
+                    var options = {
+                        width: 800, height: 240,
+                        greenFrom: -0, greenTo: 25,
+                        redFrom: 40, redTo: 50,
+                        yellowFrom: 25, yellowTo: 40,
+                        minorTicks: 5,
+                        min: -30,
+                        max: 50
+                    };
+
+                    var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+                    chart.draw(data, options);
+                }
+            }
+        });
+    </script>
+</dom-module>
