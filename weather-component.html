@@ -4,11 +4,11 @@
 <dom-module id="weather-component" attributes="apikey city">
     <template>
         <iron-ajax
-                auto
-                url="http://api.openweathermap.org/data/2.5/weather?q=[[city]]&APPID=[[apikey]]"
-                handle-as="json"
-                id="xhr"
-                on-response="onResponse">
+            auto
+            url="http://api.openweathermap.org/data/2.5/weather?q=[[city]]&APPID=[[apikey]]"
+            handle-as="json"
+            id="xhr"
+            on-response="onResponse">
         </iron-ajax>
         <style>
             h1 {
@@ -17,6 +17,7 @@
         </style>
         <!--<h1>[[city]] - [[copyr]]</h1>-->
         <div id="chart_div" style="width: 800px; height: 240px;"></div>
+        <div id="regions_div" style="width: 900px; height: 500px;"></div>
     </template>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
@@ -49,8 +50,26 @@
             onResponse: function (response) {
                 var that = this;
                 this.set('result', response.detail.response);
-                google.charts.load('current', {'packages': ['gauge']});
-                google.charts.setOnLoadCallback(drawChart);
+                google.charts.load('current', {'packages': ['gauge', 'geochart']});
+                google.charts.setOnLoadCallback(main);
+
+                function main() {
+                    drawChart();
+                    drawRegionsMap();
+                };
+
+                function drawRegionsMap() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Country', 'Durchschnittstemperatur'],
+                        ['Germany', ((that.result.main.temp_max + that.result.main.temp_min) / 2) - 273.15]
+                    ]);
+                    var options = {
+                        region: 'DE'
+                    };
+                    var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+                    chart.draw(data, options);
+                }
+
                 function drawChart() {
                     var data = google.visualization.arrayToDataTable([
                         ['Label', 'Value'],
