@@ -1,6 +1,6 @@
-# \<weather-component\>
+ch.techstack.web.polymer-weather-app
 
-
+# \<weather-component\> 
 
 ## Install the Polymer-CLI
 
